@@ -48,6 +48,10 @@ public class Spawner : MonoBehaviour {
         {
             BoidManager.Instance.StartFollow(target);
         }
+        if (GUILayout.Button("停止"))
+        {
+            BoidManager.Instance.StopFollow();
+        }
     }
 
     void Spawn()

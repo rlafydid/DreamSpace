@@ -30,10 +30,17 @@ public class BoidManager : MonoBehaviour {
 
     public void StartFollow(Transform target)
     {
-        _startFollow = true;
         foreach (var boid in boids)
         {
             boid.StartFollow(target);
+        }
+    }
+
+    public void StopFollow()
+    {
+        foreach (var boid in boids)
+        {
+            boid.StopFollow();
         }
     }
     
@@ -44,7 +51,7 @@ public class BoidManager : MonoBehaviour {
     }
     
     void Update () {
-        if (boids != null && _startFollow) {
+        if (boids != null) {
 
             int numBoids = boids.Count;
             var boidData = new BoidData[numBoids];

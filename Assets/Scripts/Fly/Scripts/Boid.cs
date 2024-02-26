@@ -30,6 +30,12 @@ public class Boid : MonoBehaviour {
     Transform cachedTransform;
     Transform target;
 
+    private float resistance;
+
+    private bool slowing;
+
+    private bool moving;
+    
     void Awake () {
         material = transform.GetComponentInChildren<MeshRenderer> ().material;
         cachedTransform = transform;
@@ -52,6 +58,14 @@ public class Boid : MonoBehaviour {
 
         float startSpeed = (settings.minSpeed + settings.maxSpeed) / 2;
         velocity = transform.forward * startSpeed;
+        moving = true;
+        resistance = 0;
+        slowing = false;
+    }
+
+    public void StopFollow()
+    {
+        slowing = true;
     }
 
     public void SetColour (Color col) {
@@ -60,7 +74,11 @@ public class Boid : MonoBehaviour {
         }
     }
 
-    public void UpdateBoid () {
+    public void UpdateBoid ()
+    {
+        if (!moving)
+            return;
+        
         Vector3 acceleration = Vector3.zero;
 
         if (target != null) {
@@ -92,6 +110,15 @@ public class Boid : MonoBehaviour {
         float speed = velocity.magnitude;
         Vector3 dir = velocity / speed;
         speed = Mathf.Clamp (speed, settings.minSpeed, settings.maxSpeed);
+
+        if (slowing)
+        {
+            speed = Math.Max(speed - resistance, 0);
+            resistance += Time.deltaTime;
+            if (speed == 0)
+                moving = false;
+        }
+        
         velocity = dir * speed;
 
         cachedTransform.position += velocity * Time.deltaTime;
