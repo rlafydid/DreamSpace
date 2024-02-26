@@ -1,0 +1,8 @@
+Library
+Logs
+Temp
+obj
+AimingRig.csproj
+*.csproj
+*.sln
+.idea
