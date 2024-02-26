@@ -14,7 +14,7 @@ public class Spawner : MonoBehaviour {
     public Color colour;
     public GizmoType showSpawnRegion;
 
-    public Boid target;
+    public Transform target;
     
     void Awake () {
         
@@ -34,9 +34,9 @@ public class Spawner : MonoBehaviour {
             Boid boid = Instantiate (prefab);
             boid.transform.position = pos;
             var dir = Quaternion.AngleAxis(Random.Range(0, 5), Vector3.up) * Vector3.forward;
-            // var forward = Random.insideUnitSphere;
+            var forward = Random.insideUnitSphere;
             // forward.y = 0;
-            boid.transform.forward = offset;
+            boid.transform.forward = forward;
 
             boid.SetColour (colour);
         }
@@ -46,7 +46,7 @@ public class Spawner : MonoBehaviour {
     {
         if (GUILayout.Button("跟随"))
         {
-            BoidManager.Instance.StartFollow(BoidManager.Instance.target);
+            BoidManager.Instance.StartFollow(target);
         }
     }
 
@@ -70,8 +70,8 @@ public class Spawner : MonoBehaviour {
         // boid.forward = Vector3.forward;
         boid.SetColour (colour);
 
-        if (target == null)
-            target = boid;
+        // if (target == null)
+            // target = boid;
     }
 
     private void OnDrawGizmos () {

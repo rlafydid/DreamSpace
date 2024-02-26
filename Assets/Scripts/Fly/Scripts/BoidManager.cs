@@ -9,7 +9,7 @@ public class BoidManager : MonoBehaviour {
 
     public BoidSettings settings;
     public ComputeShader compute;
-    List<Boid> boids;
+    List<Boid> boids = new();
     public Transform target;
 
     public static BoidManager Instance;
