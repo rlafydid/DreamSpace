@@ -25,6 +25,11 @@ public class Boid : MonoBehaviour {
     [HideInInspector]
     public int numPerceivedFlockmates;
 
+    [HideInInspector]
+    public int countInFrontCone;
+    [HideInInspector]
+    public float sumUnitSpeedInFrontCone;
+    
     // Cached
     Material material;
     Transform cachedTransform;
@@ -35,6 +40,15 @@ public class Boid : MonoBehaviour {
     private bool slowing;
 
     private bool moving;
+
+    public float speed;
+
+    public float minDistanceToTarget = 3;
+
+    public Vector3 ToTargetDirection
+    {
+        get => target == null ? transform.forward : (target.position - transform.position).normalized;
+    }
     
     void Awake () {
         material = transform.GetComponentInChildren<MeshRenderer> ().material;
@@ -65,7 +79,6 @@ public class Boid : MonoBehaviour {
 
     public void StopFollow()
     {
-        slowing = true;
     }
 
     public void SetColour (Color col) {
@@ -78,12 +91,16 @@ public class Boid : MonoBehaviour {
     {
         if (!moving)
             return;
-        
         Vector3 acceleration = Vector3.zero;
 
         if (target != null) {
             Vector3 offsetToTarget = (target.position - position);
             acceleration = SteerTowards (offsetToTarget) * settings.targetWeight;
+
+            if (offsetToTarget.magnitude < minDistanceToTarget)
+                slowing = true;
+            else
+                slowing = false;
         }
 
         if (numPerceivedFlockmates != 0) {
@@ -114,17 +131,22 @@ public class Boid : MonoBehaviour {
         if (slowing)
         {
             speed = Math.Max(speed - resistance, 0);
-            resistance += Time.deltaTime;
-            if (speed == 0)
-                moving = false;
+            resistance += Time.deltaTime * 3;
         }
-        
-        velocity = dir * speed;
+        else if (countInFrontCone > 0)
+        {
+            speed = sumUnitSpeedInFrontCone / countInFrontCone;
+        }
 
+        if (speed <= 0)
+            return;
+        velocity = dir * speed;
+        this.speed = speed;
         cachedTransform.position += velocity * Time.deltaTime;
         cachedTransform.forward = dir;
         position = cachedTransform.position;
         forward = dir;
+        
     }
 
     bool IsHeadingForCollision () {
@@ -154,4 +176,8 @@ public class Boid : MonoBehaviour {
         return Vector3.ClampMagnitude (v, settings.maxSteerForce);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(transform.position, transform.position + ToTargetDirection * 3);
+    }
 }

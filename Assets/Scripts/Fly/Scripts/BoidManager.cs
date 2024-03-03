@@ -59,6 +59,8 @@ public class BoidManager : MonoBehaviour {
             for (int i = 0; i < boids.Count; i++) {
                 boidData[i].position = boids[i].position;
                 boidData[i].direction = boids[i].forward;
+                boidData[i].speed = boids[i].speed;
+                // boidData[i].toTargetDirection = boids[i].ToTargetDirection;
             }
 
             var boidBuffer = new ComputeBuffer (numBoids, BoidData.Size);
@@ -79,6 +81,9 @@ public class BoidManager : MonoBehaviour {
                 boids[i].centreOfFlockmates = boidData[i].flockCentre;
                 boids[i].avgAvoidanceHeading = boidData[i].avoidanceHeading;
                 boids[i].numPerceivedFlockmates = boidData[i].numFlockmates;
+                
+                boids[i].countInFrontCone = boidData[i].countInFrontCone;
+                boids[i].sumUnitSpeedInFrontCone = boidData[i].sumUnitSpeedInFrontCone;
 
                 boids[i].UpdateBoid ();
             }
@@ -96,9 +101,14 @@ public class BoidManager : MonoBehaviour {
         public Vector3 avoidanceHeading;
         public int numFlockmates;
 
+        public float speed;
+        public int countInFrontCone;
+        public float sumUnitSpeedInFrontCone;
+        // public Vector3 toTargetDirection;
+        
         public static int Size {
             get {
-                return sizeof (float) * 3 * 5 + sizeof (int);
+                return sizeof (float) * 3 * 5 + sizeof (int)/*后面的后加的三个*/ + sizeof (int) + sizeof(float) * 2/* + sizeof(float) * 3*/;
             }
         }
     }
