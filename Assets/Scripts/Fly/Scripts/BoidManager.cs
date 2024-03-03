@@ -16,6 +16,11 @@ public class BoidManager : MonoBehaviour {
 
     private bool _startFollow = false;
     
+    public List<Boid> Boids
+    {
+        get => boids;
+    }
+
     private void Awake()
     {
         Instance = this;
@@ -60,7 +65,7 @@ public class BoidManager : MonoBehaviour {
                 boidData[i].position = boids[i].position;
                 boidData[i].direction = boids[i].forward;
                 boidData[i].speed = boids[i].speed;
-                // boidData[i].toTargetDirection = boids[i].ToTargetDirection;
+                boidData[i].toTargetDirection = boids[i].ToTargetDirection;
             }
 
             var boidBuffer = new ComputeBuffer (numBoids, BoidData.Size);
@@ -104,11 +109,11 @@ public class BoidManager : MonoBehaviour {
         public float speed;
         public int countInFrontCone;
         public float sumUnitSpeedInFrontCone;
-        // public Vector3 toTargetDirection;
+        public Vector3 toTargetDirection;
         
         public static int Size {
             get {
-                return sizeof (float) * 3 * 5 + sizeof (int)/*后面的后加的三个*/ + sizeof (int) + sizeof(float) * 2/* + sizeof(float) * 3*/;
+                return sizeof (float) * 3 * 5 + sizeof (int)/*后面的后加的三个*/ + sizeof (int) + sizeof(float) * 2 + sizeof(float) * 3;
             }
         }
     }

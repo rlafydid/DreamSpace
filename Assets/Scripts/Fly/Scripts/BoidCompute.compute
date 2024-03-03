@@ -10,10 +10,10 @@ struct Boid {
     float3 separationHeading;
     int numFlockmates;
 
-    // float3 toTargetDirection;
     float speed;
     int countInFrontCone;
     float sumUnitSpeedInFrontCone;
+    float3 toTargetDirection;
 };
 
 RWStructuredBuffer<Boid> boids;
@@ -68,7 +68,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
                 }
             }
 
-            if(IsTargetInCone(boids[id.x].position, boids[id.x].direction, 3,130, boidB.position))
+            if(IsTargetInCone(boids[id.x].position, boids[id.x].toTargetDirection, 1.5f,140, boidB.position))
             {
                 boids[id.x].countInFrontCone += 1;
                 boids[id.x].sumUnitSpeedInFrontCone += boidB.speed;
