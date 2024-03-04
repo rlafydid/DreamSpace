@@ -30,12 +30,13 @@ public class Spawner : MonoBehaviour {
             var offset = new Vector3(xOffset, 0, yOffset);
             
             Vector3 pos = transform.position + Random.insideUnitSphere * spawnRadius;
+            pos.y = 0;
             // Vector3 pos = transform.position;
             Boid boid = Instantiate (prefab);
             boid.transform.position = pos;
             var dir = Quaternion.AngleAxis(Random.Range(0, 5), Vector3.up) * Vector3.forward;
             var forward = Random.insideUnitSphere;
-            // forward.y = 0;
+            forward.y = 0;
             boid.transform.forward = forward;
 
             boid.SetColour (colour);

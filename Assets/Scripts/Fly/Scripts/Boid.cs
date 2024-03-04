@@ -131,7 +131,7 @@ public class Boid : MonoBehaviour {
         if (slowing)
         {
             speed = Math.Max(speed - resistance, 0);
-            resistance += Time.deltaTime * 3;
+            resistance += Time.deltaTime * 1.5f;
         }
         else if (countInFrontCone > 0)
         {

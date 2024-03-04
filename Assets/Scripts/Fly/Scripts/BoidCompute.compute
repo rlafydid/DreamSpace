@@ -68,7 +68,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
                 }
             }
 
-            if(IsTargetInCone(boids[id.x].position, boids[id.x].toTargetDirection, 1.5f,140, boidB.position))
+            if(IsTargetInCone(boids[id.x].position, boids[id.x].direction, 2,60, boidB.position))
             {
                 boids[id.x].countInFrontCone += 1;
                 boids[id.x].sumUnitSpeedInFrontCone += boidB.speed;
